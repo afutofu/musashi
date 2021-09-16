@@ -1,0 +1,28 @@
+{
+  "name": "musashi",
+  "version": "1.0.0",
+  "description": "Discord music bot",
+  "main": "./src/bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/bot.js",
+    "dev": "nodemon ./src/bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afutofu/musashi.git"
+  },
+  "author": "Muhammad Afuzarahman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/afutofu/musashi/issues"
+  },
+  "homepage": "https://github.com/afutofu/musashi#readme",
+  "dependencies": {
+    "discord.js": "^13.1.0",
+    "dotenv": "^10.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
