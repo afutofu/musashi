@@ -1,4 +1,5 @@
 const { RepeatMode } = require("discord-music-player");
+const { MessageEmbed } = require("discord.js");
 
 const musicCommands = async (player, message, command, args) => {
   let guildQueue = player.getQueue(message.guild.id);
@@ -12,7 +13,27 @@ const musicCommands = async (player, message, command, args) => {
         queue
           .play(args.join(" "))
           .then((song) => {
-            message.channel.send(`${song.name} was added to the queue.`);
+            const embedMessage = new MessageEmbed()
+              .setColor("#ffffff")
+              .setTitle(`${song.name}`)
+              .setURL(song.url)
+              .setAuthor("Added to queue")
+              .setThumbnail(song.thumbnail)
+              .addFields(
+                { name: "Channel", value: `${song.author}`, inline: true },
+                {
+                  name: "Song Duration",
+                  value: `${song.duration}`,
+                  inline: true,
+                },
+                {
+                  name: "Queue Index",
+                  value: `${queue.songs.length - 1}`,
+                  inline: true,
+                }
+              );
+            message.channel.send({ embeds: [embedMessage] });
+            // message.channel.send(`${song.name} was added to the queue.`);
           })
           .catch((_) => {
             if (!guildQueue) queue.stop();
@@ -64,7 +85,21 @@ const musicCommands = async (player, message, command, args) => {
     case "getQueue":
     case "queue":
     case "q":
-      console.log(guildQueue.songs);
+      const embedMessage = new MessageEmbed()
+        .setColor("#ffffff")
+        .setTitle("Queue")
+        .setDescription(`Now Playing\n${guildQueue.nowPlaying}`)
+        .setThumbnail(guildQueue.nowPlaying.thumbnail);
+      // .setImage(guildQueue.nowPlaying.thumbnail);
+
+      guildQueue.songs.forEach((song, i) => {
+        embedMessage.addField(`${i} - ${song.name}`, `${song.url}`, true);
+        embedMessage.addField(`Duration`, `${song.duration}`, true);
+        embedMessage.addField("\u200B", "\u200B", true);
+      });
+
+      message.channel.send({ embeds: [embedMessage] });
+      //   console.log(guildQueue.songs);
       break;
     case "getVolume":
       console.log(guildQueue.volume);
