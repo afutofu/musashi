@@ -62,6 +62,7 @@ client.player
     // console.log(`Error: ${error} in ${queue.guild.name}`);
   });
 
+const generalCommands = require("./commands/general");
 const musicCommands = require("./commands/music");
 
 client.on("ready", () => {
@@ -86,6 +87,7 @@ client.on("messageCreate", async (message) => {
   console.log(command);
   console.log(args);
 
+  generalCommands(message, command, args);
   musicCommands(client.player, message, command, args);
 });
 
