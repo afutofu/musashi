@@ -66,6 +66,10 @@ const musicCommands = require("./commands/music");
 
 client.on("ready", () => {
   console.log(`${client.user.tag} is ready!`);
+
+  // Set user game activity and status
+  client.user.setActivity("water !commands", { type: "WATCHING" });
+  client.user.setStatus("online");
 });
 
 client.on("messageCreate", async (message) => {
