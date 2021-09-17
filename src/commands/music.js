@@ -4,6 +4,12 @@ const { MessageEmbed } = require("discord.js");
 const musicCommands = async (player, message, command, args) => {
   let guildQueue = player.getQueue(message.guild.id);
 
+  // Check if user who messaged is in a voice channel
+  if (!message.member.voice.channel) {
+    message.channel.send("You need to be in a voice channel first!");
+    return;
+  }
+
   switch (command) {
     case "play":
     case "p":
