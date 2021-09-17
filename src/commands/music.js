@@ -2,6 +2,43 @@ const { RepeatMode } = require("discord-music-player");
 const { MessageEmbed } = require("discord.js");
 
 const musicCommands = async (player, message, command, args) => {
+  const musicCommandList = [
+    "play",
+    "p",
+    "playlist",
+    "skip",
+    "stop",
+    "noloop",
+    "loop",
+    "loopQueue",
+    "loopqueue",
+    "setVolume",
+    "seek",
+    "clearQueue",
+    "shuffle",
+    "getQueue",
+    "queue",
+    "q",
+    "getVolume",
+    "nowPlaying",
+    "nowplaying",
+    "pause",
+    "resume",
+    "remove",
+    "createProgressBar",
+    "createprogressbar",
+  ];
+
+  let isMusicCommand = false;
+  for (const musicCommand in musicCommandList) {
+    if (command === musicCommand) {
+      isMusicCommand = true;
+      break;
+    }
+  }
+
+  if (!isMusicCommand) return;
+
   let guildQueue = player.getQueue(message.guild.id);
 
   // Check if user who messaged is in a voice channel
@@ -39,7 +76,6 @@ const musicCommands = async (player, message, command, args) => {
                 }
               );
             message.channel.send({ embeds: [embedMessage] });
-            // message.channel.send(`${song.name} was added to the queue.`);
           })
           .catch((_) => {
             if (!guildQueue) queue.stop();
@@ -105,7 +141,6 @@ const musicCommands = async (player, message, command, args) => {
         .setTitle("Queue")
         .setDescription(`Now Playing\n${guildQueue.nowPlaying}`)
         .setThumbnail(guildQueue.nowPlaying.thumbnail);
-      // .setImage(guildQueue.nowPlaying.thumbnail);
 
       guildQueue.songs.forEach((song, i) => {
         embedMessage.addField(`${i} - ${song.name}`, `${song.url}`, true);
