@@ -2,43 +2,6 @@ const { RepeatMode } = require("discord-music-player");
 const { MessageEmbed } = require("discord.js");
 
 const musicCommands = async (player, message, command, args) => {
-  const musicCommandList = [
-    "play",
-    "p",
-    "playlist",
-    "skip",
-    "stop",
-    "noloop",
-    "loop",
-    "loopQueue",
-    "loopqueue",
-    "setVolume",
-    "seek",
-    "clearQueue",
-    "shuffle",
-    "getQueue",
-    "queue",
-    "q",
-    "getVolume",
-    "nowPlaying",
-    "nowplaying",
-    "pause",
-    "resume",
-    "remove",
-    "createProgressBar",
-    "createprogressbar",
-  ];
-
-  let isMusicCommand = false;
-  for (const musicCommand in musicCommandList) {
-    if (command === musicCommand) {
-      isMusicCommand = true;
-      break;
-    }
-  }
-
-  if (!isMusicCommand) return;
-
   let guildQueue = player.getQueue(message.guild.id);
 
   // Check if user who messaged is in a voice channel
@@ -175,9 +138,6 @@ const musicCommands = async (player, message, command, args) => {
 
       // [======>              ][00:35/2:20]
       console.log(ProgressBar.prettier);
-      break;
-    default:
-      message.channel.send("I do not know that command.");
       break;
   }
 };

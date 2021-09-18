@@ -62,6 +62,7 @@ client.player
     // console.log(`Error: ${error} in ${queue.guild.name}`);
   });
 
+const commands = require("./commands/");
 const generalCommands = require("./commands/general");
 const musicCommands = require("./commands/music");
 
@@ -87,8 +88,36 @@ client.on("messageCreate", async (message) => {
   console.log(command);
   console.log(args);
 
-  generalCommands(message, command, args);
-  musicCommands(client.player, message, command, args);
+  let commandType = null;
+
+  for (const generalCommand of commands.generalCommands) {
+    if (command === generalCommand) {
+      commandType = "general";
+      break;
+    }
+  }
+  if (!commandType) {
+    for (const musicCommand of commands.musicCommands) {
+      if (command === musicCommand) {
+        commandType = "music";
+        break;
+      }
+    }
+  }
+
+  console.log(commandType);
+
+  switch (commandType) {
+    case "general":
+      generalCommands(message, command, args);
+      break;
+    case "music":
+      musicCommands(client.player, message, command, args);
+      break;
+    default:
+      message.channel.send("I do not know that command.");
+      break;
+  }
 });
 
 client.login(process.env.BOT_TOKEN);

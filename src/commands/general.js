@@ -6,7 +6,6 @@ const generalCommands = (message, command, args) => {
       message.channel.send("Hello!");
       break;
     case "commands":
-      console.log("test");
       const embedMessage = new MessageEmbed().setColor("#ffffff").addFields(
         { name: "General", value: "hello\ncommands" },
         {
@@ -16,9 +15,6 @@ const generalCommands = (message, command, args) => {
         }
       );
       message.channel.send({ embeds: [embedMessage] });
-      break;
-    default:
-      message.channel.send("I do not know that command.");
       break;
   }
 };
