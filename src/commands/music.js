@@ -60,29 +60,33 @@ const musicCommands = async (player, message, command, args) => {
       }
       break;
     case "skip":
+      guildQueue.skip();
       message.channel.send(
         `:fast_forward: Skipped ${guildQueue.nowPlaying.name}`
       );
-      guildQueue.skip();
       break;
     case "stop":
-      message.channel.send("Bye!");
       guildQueue.stop();
+      message.channel.send("Bye!");
       break;
     case "noloop":
-      message.channel.send("Loop disabled!");
       guildQueue.setRepeatMode(RepeatMode.DISABLED); // or 0 instead of RepeatMode.DISABLED
+      message.channel.send("Loop disabled!");
       break;
     case "loop":
+      if (guildQueue.songs.length <= 0) {
+        message.channel.send("No songs in queue!");
+        return;
+      }
+      guildQueue.setRepeatMode(RepeatMode.SONG); // or 1 instead of RepeatMode.SONG
       message.channel.send(
         `:repeat_one: Now looping ${guildQueue.nowPlaying.name}`
       );
-      guildQueue.setRepeatMode(RepeatMode.SONG); // or 1 instead of RepeatMode.SONG
       break;
     case "loopQueue":
     case "loopqueue":
-      message.channel.send(`:repeat: Now looping queue`);
       guildQueue.setRepeatMode(RepeatMode.QUEUE); // or 2 instead of RepeatMode.QUEUE
+      message.channel.send(`:repeat: Now looping queue`);
       break;
     case "setVolume":
       guildQueue.setVolume(parseInt(args[0]));
@@ -91,10 +95,13 @@ const musicCommands = async (player, message, command, args) => {
       guildQueue.seek(parseInt(args[0]) * 1000);
       break;
     case "clearQueue":
+    case "clearqueue":
       guildQueue.clearQueue();
+      message.channel.send("Cleared queue");
       break;
     case "shuffle":
       guildQueue.shuffle();
+      message.channel.send(`:twisted_rightwards_arrows: Shuffled queue`);
       break;
     case "getQueue":
     case "queue":
@@ -118,19 +125,21 @@ const musicCommands = async (player, message, command, args) => {
       break;
     case "nowPlaying":
     case "nowplaying":
-      message.channel.send(`Now playing: ${guildQueue.nowPlaying}`);
       console.log(`Now playing: ${guildQueue.nowPlaying}`);
+      message.channel.send(`Now playing: ${guildQueue.nowPlaying}`);
       break;
     case "pause":
-      message.channel.send(":play_pause: Paused");
       guildQueue.setPaused(true);
+      message.channel.send(":play_pause: Paused");
       break;
     case "resume":
-      message.channel.send(":play_pause: Resumed");
       guildQueue.setPaused(false);
+      message.channel.send(":play_pause: Resumed");
       break;
     case "remove":
+      const songName = guildQueue.songs[0].name;
       guildQueue.remove(parseInt(args[0]));
+      message.channel.send(`Removed ${songName}`);
       break;
     case "createProgressBar":
     case "createprogressbar":
