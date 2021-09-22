@@ -10,39 +10,54 @@ const musicCommands = async (player, message, command, args) => {
     return;
   }
 
+  const play = async (player, message, args) => {
+    let queue = player.createQueue(message.guild.id);
+    await queue.join(message.member.voice.channel);
+    queue
+      .play(args.join(" "))
+      .then((song) => {
+        const embedMessage = new MessageEmbed()
+          .setColor("#ffffff")
+          .setTitle(`${song.name}`)
+          .setURL(song.url)
+          .setAuthor("Added to queue")
+          .setThumbnail(song.thumbnail)
+          .addFields(
+            { name: "Channel", value: `${song.author}`, inline: true },
+            {
+              name: "Song Duration",
+              value: `${song.duration}`,
+              inline: true,
+            },
+            {
+              name: "Queue Index",
+              value: `${queue.songs.length - 1}`,
+              inline: true,
+            }
+          );
+        message.channel.send({ embeds: [embedMessage] });
+      })
+      .catch((_) => {
+        if (!guildQueue) queue.stop();
+      });
+  };
+
   switch (command) {
     case "play":
     case "p":
+      play(player, message, args);
+      break;
+    case "playBatch":
+    case "playbatch":
+    case "pb":
       {
-        let queue = player.createQueue(message.guild.id);
-        await queue.join(message.member.voice.channel);
-        queue
-          .play(args.join(" "))
-          .then((song) => {
-            const embedMessage = new MessageEmbed()
-              .setColor("#ffffff")
-              .setTitle(`${song.name}`)
-              .setURL(song.url)
-              .setAuthor("Added to queue")
-              .setThumbnail(song.thumbnail)
-              .addFields(
-                { name: "Channel", value: `${song.author}`, inline: true },
-                {
-                  name: "Song Duration",
-                  value: `${song.duration}`,
-                  inline: true,
-                },
-                {
-                  name: "Queue Index",
-                  value: `${queue.songs.length - 1}`,
-                  inline: true,
-                }
-              );
-            message.channel.send({ embeds: [embedMessage] });
-          })
-          .catch((_) => {
-            if (!guildQueue) queue.stop();
-          });
+        const fullArg = args.join(" ");
+        const separatedSongs = fullArg.split("|");
+
+        for (songStr of separatedSongs) {
+          const songArgs = songStr.trim().split(" ");
+          play(player, message, songArgs);
+        }
       }
       break;
     case "playlist":

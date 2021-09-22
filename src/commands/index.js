@@ -3,6 +3,7 @@ const generalCommands = ["hello", "commands", "clear"];
 const musicCommands = [
   "play",
   "p",
+  "playbatch",
   "playlist",
   "skip",
   "stop",
