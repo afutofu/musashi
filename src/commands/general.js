@@ -7,11 +7,11 @@ const generalCommands = (message, command, args) => {
       break;
     case "commands":
       const embedMessage = new MessageEmbed().setColor("#ffffff").addFields(
-        { name: "General", value: "hello\ncommands" },
+        { name: "General", value: "hello\ncommands\nclear" },
         {
           name: "music",
           value:
-            "play\nplaylist\nskip\nstop\nloop\nloopQueue\nnoLoop\nqueue\nclearQueue\npause\nresume\nremove\nnowPlaying\nsetVolume\ncreateProgressBar",
+            "play\nplayBatch\nplaylist\nskip\nstop\nloop\nloopQueue\nnoLoop\nqueue\nclearQueue\npause\nresume\nremove\nnowPlaying\nsetVolume\ncreateProgressBar",
         }
       );
       message.channel.send({ embeds: [embedMessage] });
