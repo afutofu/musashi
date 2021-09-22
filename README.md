@@ -1,6 +1,6 @@
-# Musashi
+# Musashi (WIP)
 
-A discord bot that is able to play music right into your discord channel. Play songs from youtube and spotify and enjoy them with your friends!
+A discord bot to play music right into your discord servers. Play songs from youtube and spotify and enjoy them with your friends!
 
 Technologies used:
 
@@ -14,6 +14,7 @@ Features in this version:
 
 Future implementations:
 
+- Save queues for an account
 - Get wikipepdia information
 - Anime information
 - Apply mathematical formulas
