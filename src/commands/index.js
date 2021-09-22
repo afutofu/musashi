@@ -1,4 +1,4 @@
-const generalCommands = ["hello", "commands"];
+const generalCommands = ["hello", "commands", "clear"];
 
 const musicCommands = [
   "play",
