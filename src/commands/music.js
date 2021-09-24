@@ -20,7 +20,8 @@ const musicCommands = async (player, message, command, args) => {
     lowercaseCommand != "p" &&
     lowercaseCommand != "playbatch" &&
     lowercaseCommand != "pb" &&
-    lowercaseCommand != "playlist"
+    lowercaseCommand != "playlist" &&
+    lowercaseCommand != "load"
   ) {
     message.channel.send("There is no queue!");
     return;
@@ -180,30 +181,70 @@ const musicCommands = async (player, message, command, args) => {
       console.log(ProgressBar.prettier);
       break;
     case "save":
-      const queueSongs = guildQueue.songs;
-      const userId = message.author.id;
-      let songs = [];
+      {
+        const queueSongs = guildQueue.songs;
+        const userId = message.author.id;
+        let songs = [];
 
-      for (song of queueSongs) {
-        songs.push(song.url);
-      }
+        for (song of queueSongs) {
+          songs.push(song.url);
+        }
 
-      // Save queue string and user id to database as new queue object
-      const queue = new Queue({
-        userId,
-        songs,
-      });
+        // Save queue string and user id to database as new queue object
+        Queue.findOneAndUpdate({ userId }, { songs }, (err, foundQueue) => {
+          if (err) {
+            console.log(err);
+            message.channel.send("Error saving queue");
+            return;
+          }
 
-      queue
-        .save()
-        .then(() => {
-          message.channel.send("Successfully saved queue");
-        })
-        .catch((err) => {
-          console.log(err);
-          message.channel.send("Error in saving queue");
+          // If there is no queue associated with user, create a new queue record in DB
+          if (!foundQueue) {
+            const queue = new Queue({
+              userId,
+              songs,
+            });
+
+            queue
+              .save()
+              .then(() => {
+                message.channel.send(
+                  "Successfully saved queue with your account"
+                );
+              })
+              .catch((err) => {
+                console.log(err);
+                message.channel.send("Error in saving queue");
+              });
+            return;
+          }
+
+          message.channel.send("Successfully updated queue with your account");
         });
+      }
+      break;
+    case "load":
+      {
+        // Fetch queue from DB
+        const userId = message.author.id;
+        Queue.findOne({ userId }, (err, foundQueue) => {
+          if (err) {
+            console.log(err);
+            message.channel.send("Error loading queue");
+            return;
+          }
 
+          // If there is no queue associated with user
+          if (!foundQueue) {
+            message.channel.send("No queue saved with this user");
+            return;
+          }
+
+          for (songUrl of foundQueue.songs) {
+            play(player, message, [songUrl]);
+          }
+        });
+      }
       break;
   }
 };

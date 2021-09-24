@@ -27,6 +27,7 @@ const musicCommands = [
   "createProgressBar",
   "createprogressbar",
   "save",
+  "load",
 ];
 
 module.exports = {
