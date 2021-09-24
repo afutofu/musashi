@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 console.clear();
 
 const { Client, Intents } = require("discord.js");
@@ -120,4 +118,4 @@ client.on("messageCreate", async (message) => {
   }
 });
 
-client.login(process.env.BOT_TOKEN);
+module.exports = client;

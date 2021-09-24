@@ -5,8 +5,8 @@
   "main": "./src/bot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/bot.js",
-    "dev": "nodemon ./src/bot.js"
+    "start": "node ./src/server.js",
+    "dev": "nodemon ./src/server.js"
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,8 @@
     "@discordjs/opus": "^0.6.0",
     "discord-music-player": "^8.0.2",
     "discord.js": "^13.1.0",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "mongoose": "^6.0.7"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
