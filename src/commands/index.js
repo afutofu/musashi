@@ -26,6 +26,7 @@ const musicCommands = [
   "remove",
   "createProgressBar",
   "createprogressbar",
+  "save",
 ];
 
 module.exports = {

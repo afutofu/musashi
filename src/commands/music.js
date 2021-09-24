@@ -2,11 +2,25 @@ const { RepeatMode } = require("discord-music-player");
 const { MessageEmbed } = require("discord.js");
 
 const musicCommands = async (player, message, command, args) => {
-  let guildQueue = player.getQueue(message.guild.id);
+  let guildQueue = await player.getQueue(message.guild.id);
 
   // Check if user who messaged is in a voice channel
   if (!message.member.voice.channel) {
     message.channel.send("You need to be in a voice channel first!");
+    return;
+  }
+
+  // Check if there is a queue when a command is issued
+  const lowercaseCommand = command.toLowerCase();
+  if (
+    !guildQueue &&
+    lowercaseCommand != "play" &&
+    lowercaseCommand != "p" &&
+    lowercaseCommand != "playbatch" &&
+    lowercaseCommand != "pb" &&
+    lowercaseCommand != "playlist"
+  ) {
+    message.channel.send("There is no queue!");
     return;
   }
 
@@ -162,6 +176,21 @@ const musicCommands = async (player, message, command, args) => {
 
       // [======>              ][00:35/2:20]
       console.log(ProgressBar.prettier);
+      break;
+    case "save":
+      const songs = guildQueue.songs;
+      const userId = message.author.id;
+      let songsString = songs[0].url;
+
+      // Get songString to be saved to DB
+      // Ex - [url1] | [url2] | [url3]
+      if (songs.length > 1) {
+        for (song of songs) {
+          songsString += " | " + song.url;
+        }
+      }
+      console.log("Save queue with id");
+      console.log(songsString, userId);
       break;
   }
 };
