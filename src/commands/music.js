@@ -1,6 +1,8 @@
 const { RepeatMode } = require("discord-music-player");
 const { MessageEmbed } = require("discord.js");
 
+const Queue = require("../models/Queue");
+
 const musicCommands = async (player, message, command, args) => {
   let guildQueue = await player.getQueue(message.guild.id);
 
@@ -178,19 +180,30 @@ const musicCommands = async (player, message, command, args) => {
       console.log(ProgressBar.prettier);
       break;
     case "save":
-      const songs = guildQueue.songs;
+      const queueSongs = guildQueue.songs;
       const userId = message.author.id;
-      let songsString = songs[0].url;
+      let songs = [];
 
-      // Get songString to be saved to DB
-      // Ex - [url1] | [url2] | [url3]
-      if (songs.length > 1) {
-        for (song of songs) {
-          songsString += " | " + song.url;
-        }
+      for (song of queueSongs) {
+        songs.push(song.url);
       }
-      console.log("Save queue with id");
-      console.log(songsString, userId);
+
+      // Save queue string and user id to database as new queue object
+      const queue = new Queue({
+        userId,
+        songs,
+      });
+
+      queue
+        .save()
+        .then(() => {
+          message.channel.send("Successfully saved queue");
+        })
+        .catch((err) => {
+          console.log(err);
+          message.channel.send("Error in saving queue");
+        });
+
       break;
   }
 };
