@@ -4,16 +4,18 @@ const client = require("./bot");
 const mongoose = require("mongoose");
 
 // CONNECT TO DB
-mongoose.connect(
-  process.env.DB_CONNECTION,
-  {
+mongoose
+  .connect(process.env.DB_CONNECTION, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-  },
-  () => console.log("Connected to DB!")
-);
+  })
+  .then(() => {
+    console.log("Connected to DB!");
+  })
+  .catch((err) => {
+    console.log("Failed to connect to DB");
+    console.log(err);
+  });
 
 // INITIALIZE BOT
 client.login(process.env.BOT_TOKEN);
