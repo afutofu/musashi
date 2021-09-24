@@ -11,7 +11,7 @@ const generalCommands = (message, command, args) => {
         {
           name: "music",
           value:
-            "play\nplayBatch\nplaylist\nskip\nstop\nloop\nloopQueue\nnoLoop\nqueue\nclearQueue\npause\nresume\nremove\nnowPlaying\nsetVolume\ncreateProgressBar",
+            "play\nplayBatch\nplaylist\nskip\nstop\nloop\nloopQueue\nnoLoop\nqueue\nclearQueue\npause\nresume\nremove\nnowPlaying\nsetVolume\ncreateProgressBar\nsave\nload",
         }
       );
       message.channel.send({ embeds: [embedMessage] });
