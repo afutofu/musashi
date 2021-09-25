@@ -27,12 +27,13 @@ const musicCommands = async (player, message, command, args) => {
     return;
   }
 
-  const play = async (player, message, args) => {
+  const play = async (player, message, args, noFeedback) => {
     let queue = player.createQueue(message.guild.id);
     await queue.join(message.member.voice.channel);
     queue
       .play(args.join(" "))
       .then((song) => {
+        if (noFeedback) return;
         const embedMessage = new MessageEmbed()
           .setColor("#ffffff")
           .setTitle(`${song.name}`)
@@ -84,7 +85,7 @@ const musicCommands = async (player, message, command, args) => {
         queue
           .playlist(args.join(" "))
           .then((song) => {
-            message.channel.send(`${song.name} was added to the queue.`);
+            message.channel.send(`**${song.name}** was added to the queue.`);
           })
           .catch((_) => {
             if (!guildQueue) queue.stop();
@@ -94,7 +95,7 @@ const musicCommands = async (player, message, command, args) => {
     case "skip":
       guildQueue.skip();
       message.channel.send(
-        `:fast_forward: Skipped ${guildQueue.nowPlaying.name}`
+        `:fast_forward: Skipped **${guildQueue.nowPlaying.name}**`
       );
       break;
     case "stop":
@@ -112,7 +113,7 @@ const musicCommands = async (player, message, command, args) => {
       }
       guildQueue.setRepeatMode(RepeatMode.SONG); // or 1 instead of RepeatMode.SONG
       message.channel.send(
-        `:repeat_one: Now looping ${guildQueue.nowPlaying.name}`
+        `:repeat_one: Now looping **${guildQueue.nowPlaying.name}**`
       );
       break;
     case "loopQueue":
@@ -158,7 +159,7 @@ const musicCommands = async (player, message, command, args) => {
     case "nowPlaying":
     case "nowplaying":
       console.log(`Now playing: ${guildQueue.nowPlaying}`);
-      message.channel.send(`Now playing: ${guildQueue.nowPlaying}`);
+      message.channel.send(`Now playing **${guildQueue.nowPlaying}**`);
       break;
     case "pause":
       guildQueue.setPaused(true);
@@ -169,9 +170,9 @@ const musicCommands = async (player, message, command, args) => {
       message.channel.send(":play_pause: Resumed");
       break;
     case "remove":
-      const songName = guildQueue.songs[0].name;
+      const songName = guildQueue.songs[parseInt(args[0])].name;
       guildQueue.remove(parseInt(args[0]));
-      message.channel.send(`Removed ${songName}`);
+      message.channel.send(`Removed **${songName}**`);
       break;
     case "createProgressBar":
     case "createprogressbar":
@@ -227,7 +228,7 @@ const musicCommands = async (player, message, command, args) => {
       {
         // Fetch queue from DB
         const userId = message.author.id;
-        Queue.findOne({ userId }, (err, foundQueue) => {
+        Queue.findOne({ userId }, async (err, foundQueue) => {
           if (err) {
             console.log(err);
             message.channel.send("Error loading queue");
@@ -241,8 +242,10 @@ const musicCommands = async (player, message, command, args) => {
           }
 
           for (songUrl of foundQueue.songs) {
-            play(player, message, [songUrl]);
+            await play(player, message, [songUrl], true);
           }
+
+          message.channel.send("Successfully loaded queue");
         });
       }
       break;
