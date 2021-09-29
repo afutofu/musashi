@@ -187,8 +187,9 @@ const musicCommands = async (player, message, command, args) => {
         const userId = message.author.id;
         let songs = [];
 
-        for (song of queueSongs) {
-          songs.push(song.url);
+        for (const song of queueSongs) {
+          // Add song name and channel name
+          songs.push(song.name + " " + song.author.trim);
         }
 
         // Save queue string and user id to database as new queue object
@@ -241,8 +242,10 @@ const musicCommands = async (player, message, command, args) => {
             return;
           }
 
-          for (songUrl of foundQueue.songs) {
-            play(player, message, [songUrl]);
+          for (const songName of foundQueue.songs) {
+            // Turns "Song Name" to ["Song", "Name"]
+            const songArgs = songName.trim().split(" ");
+            play(player, message, songArgs, true);
           }
 
           message.channel.send("Successfully loaded queue");
