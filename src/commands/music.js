@@ -242,7 +242,7 @@ const musicCommands = async (player, message, command, args) => {
           }
 
           for (songUrl of foundQueue.songs) {
-            await play(player, message, [songUrl], true);
+            play(player, message, [songUrl]);
           }
 
           message.channel.send("Successfully loaded queue");
