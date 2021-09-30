@@ -189,7 +189,7 @@ const musicCommands = async (player, message, command, args) => {
 
         for (const song of queueSongs) {
           // Add song name and channel name
-          songs.push(song.name + " " + song.author.trim);
+          songs.push(song.name + " " + song.author);
         }
 
         // Save queue string and user id to database as new queue object
