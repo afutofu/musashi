@@ -1,4 +1,6 @@
-# Musashi (WIP)
+# Musashi
+
+Website & Discord Invite Link : [Musashi](https://musashi-bot.netlify.app/)
 
 A discord bot to play music right into your discord servers. Play songs from youtube and spotify and enjoy them with your friends!
 
