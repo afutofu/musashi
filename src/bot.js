@@ -81,7 +81,7 @@ client.on("messageCreate", async (message) => {
     .substring(PREFIX.length)
     .split(/\s+/);
 
-  // command = command.toLowerCase();
+  command = command.toLowerCase();
 
   console.log(command);
   console.log(args);

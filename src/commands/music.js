@@ -12,16 +12,15 @@ const musicCommands = async (player, message, command, args) => {
     return;
   }
 
-  // Check if there is a queue when a command is issued
-  const lowercaseCommand = command.toLowerCase();
+  // Check if there is a queue when certain commands are issued
   if (
     !guildQueue &&
-    lowercaseCommand != "play" &&
+    command != "play" &&
     lowercaseCommand != "p" &&
-    lowercaseCommand != "playbatch" &&
-    lowercaseCommand != "pb" &&
-    lowercaseCommand != "playlist" &&
-    lowercaseCommand != "load"
+    command != "playbatch" &&
+    command != "pb" &&
+    command != "playlist" &&
+    command != "load"
   ) {
     message.channel.send("There is no queue!");
     return;
@@ -65,7 +64,6 @@ const musicCommands = async (player, message, command, args) => {
     case "p":
       play(player, message, args);
       break;
-    case "playBatch":
     case "playbatch":
     case "pb":
       {
@@ -98,7 +96,7 @@ const musicCommands = async (player, message, command, args) => {
         `:fast_forward: Skipped **${guildQueue.nowPlaying.name}**`
       );
       break;
-    case "stop":
+    case "leave":
       guildQueue.stop();
       message.channel.send("Bye!");
       break;
@@ -116,18 +114,16 @@ const musicCommands = async (player, message, command, args) => {
         `:repeat_one: Now looping **${guildQueue.nowPlaying.name}**`
       );
       break;
-    case "loopQueue":
     case "loopqueue":
       guildQueue.setRepeatMode(RepeatMode.QUEUE); // or 2 instead of RepeatMode.QUEUE
       message.channel.send(`:repeat: Now looping queue`);
       break;
-    case "setVolume":
+    case "setvolume":
       guildQueue.setVolume(parseInt(args[0]));
       break;
     case "seek":
       guildQueue.seek(parseInt(args[0]) * 1000);
       break;
-    case "clearQueue":
     case "clearqueue":
       guildQueue.clearQueue();
       message.channel.send("Cleared queue");
@@ -136,7 +132,7 @@ const musicCommands = async (player, message, command, args) => {
       guildQueue.shuffle();
       message.channel.send(`:twisted_rightwards_arrows: Shuffled queue`);
       break;
-    case "getQueue":
+    case "getqueue":
     case "queue":
     case "q":
       const embedMessage = new MessageEmbed()
@@ -153,10 +149,9 @@ const musicCommands = async (player, message, command, args) => {
 
       message.channel.send({ embeds: [embedMessage] });
       break;
-    case "getVolume":
+    case "getvolume":
       console.log(guildQueue.volume);
       break;
-    case "nowPlaying":
     case "nowplaying":
       console.log(`Now playing: ${guildQueue.nowPlaying}`);
       message.channel.send(`Now playing **${guildQueue.nowPlaying}**`);
@@ -174,7 +169,6 @@ const musicCommands = async (player, message, command, args) => {
       guildQueue.remove(parseInt(args[0]));
       message.channel.send(`Removed **${songName}**`);
       break;
-    case "createProgressBar":
     case "createprogressbar":
       const ProgressBar = guildQueue.createProgressBar();
 
