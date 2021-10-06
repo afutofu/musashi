@@ -16,7 +16,7 @@ const musicCommands = async (player, message, command, args) => {
   if (
     !guildQueue &&
     command != "play" &&
-    lowercaseCommand != "p" &&
+    command != "p" &&
     command != "playbatch" &&
     command != "pb" &&
     command != "playlist" &&
