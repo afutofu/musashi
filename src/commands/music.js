@@ -59,6 +59,20 @@ const musicCommands = async (player, message, command, args) => {
       });
   };
 
+  const loadQueue = async (foundQueue) =>
+    new Promise(async (resolve, reject) => {
+      try {
+        for (const songName of foundQueue.songs) {
+          // Turns "Song Name" to ["Song", "Name"]
+          const songArgs = songName.trim().split(" ");
+          await play(player, message, songArgs, true);
+        }
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
+    });
+
   switch (command) {
     case "play":
     case "p":
@@ -72,7 +86,7 @@ const musicCommands = async (player, message, command, args) => {
 
         for (songStr of separatedSongs) {
           const songArgs = songStr.trim().split(" ");
-          play(player, message, songArgs);
+          await play(player, message, songArgs);
         }
       }
       break;
@@ -135,11 +149,21 @@ const musicCommands = async (player, message, command, args) => {
     case "getqueue":
     case "queue":
     case "q":
-      const embedMessage = new MessageEmbed()
-        .setColor("#ffffff")
-        .setTitle("Queue")
-        .setDescription(`Now Playing\n${guildQueue.nowPlaying}`)
-        .setThumbnail(guildQueue.nowPlaying.thumbnail);
+      let embedMessage;
+      if (guildQueue.nowPlaying != undefined) {
+        embedMessage = new MessageEmbed()
+          .setColor("#ffffff")
+          .setTitle("Queue")
+          .setDescription(`Now Playing\n${guildQueue.nowPlaying}`)
+          .setThumbnail(guildQueue.nowPlaying.thumbnail);
+      } else {
+        embedMessage = new MessageEmbed()
+          .setColor("#ffffff")
+          .setTitle("Queue")
+          .setDescription(
+            `No song currently playing. Play a song or wait for a song to load.`
+          );
+      }
 
       guildQueue.songs.forEach((song, i) => {
         embedMessage.addField(`${i} - ${song.name}`, `${song.url}`, true);
@@ -153,8 +177,12 @@ const musicCommands = async (player, message, command, args) => {
       console.log(guildQueue.volume);
       break;
     case "nowplaying":
-      console.log(`Now playing: ${guildQueue.nowPlaying}`);
-      message.channel.send(`Now playing **${guildQueue.nowPlaying}**`);
+      if (guildQueue.nowPlaying != undefined) {
+        console.log(`Now playing: ${guildQueue.nowPlaying}`);
+        message.channel.send(`Now playing **${guildQueue.nowPlaying}**`);
+      } else {
+        message.channel.send(`No song currently playing.`);
+      }
       break;
     case "pause":
       guildQueue.setPaused(true);
@@ -236,13 +264,12 @@ const musicCommands = async (player, message, command, args) => {
             return;
           }
 
-          for (const songName of foundQueue.songs) {
-            // Turns "Song Name" to ["Song", "Name"]
-            const songArgs = songName.trim().split(" ");
-            play(player, message, songArgs, true);
-          }
-
-          message.channel.send("Successfully loaded queue");
+          message.channel.send(
+            "Loading saved songs into queue. Please wait a few seconds.."
+          );
+          await loadQueue(foundQueue).then(() => {
+            message.channel.send("Successfully loaded queue.");
+          });
         });
       }
       break;
