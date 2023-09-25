@@ -110,7 +110,8 @@ client.on("messageCreate", async (message) => {
       generalCommands(message, command, args);
       break;
     case "music":
-      musicCommands(client.player, message, command, args);
+      message.channel.send("Music commands are no longer supported. Sorry!");
+      // musicCommands(client.player, message, command, args);
       break;
     default:
       message.channel.send("I do not know that command.");

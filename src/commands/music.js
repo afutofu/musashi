@@ -61,11 +61,13 @@ const musicCommands = async (player, message, command, args) => {
 
   const loadQueue = async (foundQueue) =>
     new Promise(async (resolve, reject) => {
+      console.log("loadQueue");
       try {
         for (const songName of foundQueue.songs) {
           // Turns "Song Name" to ["Song", "Name"]
           const songArgs = songName.trim().split(" ");
           await play(player, message, songArgs, true);
+          console.log("post play");
         }
         resolve();
       } catch (e) {
@@ -267,9 +269,15 @@ const musicCommands = async (player, message, command, args) => {
           message.channel.send(
             "Loading saved songs into queue. Please wait a few seconds.."
           );
-          await loadQueue(foundQueue).then(() => {
-            message.channel.send("Successfully loaded queue.");
-          });
+
+          await loadQueue(foundQueue)
+            .then(() => {
+              message.channel.send("Successfully loaded queue.");
+            })
+            .catch((e) => {
+              console.log(e);
+              message.channel.send("Failed to load queue.");
+            });
         });
       }
       break;

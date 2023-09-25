@@ -11,11 +11,11 @@ mongoose
   })
   .then(() => {
     console.log("Connected to DB!");
+
+    // INITIALIZE BOT
+    client.login(process.env.BOT_TOKEN);
   })
   .catch((err) => {
     console.log("Failed to connect to DB");
     console.log(err);
   });
-
-// INITIALIZE BOT
-client.login(process.env.BOT_TOKEN);
