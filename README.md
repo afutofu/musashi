@@ -6,10 +6,10 @@ A discord bot to play music right into your discord servers. Play songs from you
 
 Technologies used:
 
-- [Node.js](https://nodejs.org/en/) - Javascript backend runtime environment
-- [Discord.js](https://reactjs.org/) - Allows easy interaction with Discord API
-- [Discord Music Player](https://redux.js.org/) - Easily implement music commands
-- [MongoDB](https://www.mongodb.com/) - Online database to store music queues
+- [Node.js](https://nodejs.org/en/)
+- [Discord.js](https://reactjs.org/)
+- [Discord Music Player](https://redux.js.org/)
+- [MongoDB](https://www.mongodb.com/)
 
 Features in this version:
 
